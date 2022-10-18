@@ -1,0 +1,12 @@
+[Unit]
+Description=dnsmonitor
+Documentation=https://github.com/RaaLabs/dnsmonitor
+After=network-online.target nss-lookup.target
+Requires=network-online.target nss-lookup.target
+
+[Service]
+ExecStart=/bin/bash -c '/usr/local/dnsmonitor/scripts/run.sh'
+
+[Install]
+WantedBy=multi-user.target
+#Alias=packetcontrol.service
