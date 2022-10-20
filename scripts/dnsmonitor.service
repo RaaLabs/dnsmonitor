@@ -5,7 +5,7 @@ After=network-online.target nss-lookup.target
 Requires=network-online.target nss-lookup.target
 
 [Service]
-ExecStart=/bin/bash -c '/usr/local/dnsmonitor/scripts/run.sh'
+ExecStart=/bin/bash -c '/usr/local/dnsmonitor/run.sh'
 
 [Install]
 WantedBy=multi-user.target
