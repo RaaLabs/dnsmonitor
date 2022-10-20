@@ -3,12 +3,16 @@ package main
 import (
 	"flag"
 	"fmt"
+	"net"
+	"net/http"
+	"os"
 	"strings"
 
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
 	"github.com/google/gopacket/pcap"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -21,10 +25,11 @@ func init() {
 
 func main() {
 	var (
-		iface   string
-		promisc bool
-		snaplen int
-		verbose bool
+		iface        string
+		promisc      bool
+		snaplen      int
+		verbose      bool
+		httpHostPort string
 	)
 
 	// cli flags
@@ -32,6 +37,7 @@ func main() {
 	flag.BoolVar(&promisc, "promisc", true, "promiscuous mode")
 	flag.BoolVar(&verbose, "verbose", false, "enable debug logging")
 	flag.IntVar(&snaplen, "snaplen", 65536, "packet snap length")
+	flag.StringVar(&httpHostPort, "httpHostPort", "localhost:9111", "<host>:<port> for exposing the metrics")
 	flag.Parse()
 
 	if verbose {
@@ -44,6 +50,18 @@ func main() {
 			"snaplen":     snaplen,
 		}).Info("No flags specified, using defaults")
 	}
+
+	// Start http server
+	go func() {
+		n, err := net.Listen("tcp", httpHostPort)
+		if err != nil {
+			log.Printf("error: failed to open prometheus listen port: %v\n", err)
+			os.Exit(1)
+		}
+		mux := http.NewServeMux()
+		mux.Handle("/metrics", promhttp.Handler())
+		http.Serve(n, mux)
+	}()
 
 	switch strings.ToLower(iface) {
 	case "", "any", "all":

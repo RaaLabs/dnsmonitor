@@ -1,14 +1,16 @@
 # dnsmonitor
 
 ```bash
+  -httpHostPort string
+      <host>:<port> for exposing the metrics (default "localhost:9111")
   -interface string
-        interface to listen on
+      interface to listen on
   -promisc
-        promiscuous mode (default true)
+      promiscuous mode (default true)
   -snaplen int
-        packet snap length (default 65536)
+      packet snap length (default 65536)
   -verbose
-        enable debug logging
+      enable debug logging
 ```
 
 ## Build
