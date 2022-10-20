@@ -6,4 +6,4 @@
 ## use something like the example below, and call this run.sh
 ## script via systemd.
 
-/bin/bash -c 'CAPTURENIC=$(nmcli conn |grep "WAN"|awk "{print \$4}")  && /usr/local/dnsmonitor/dnsmonitor -iface=${CAPTURENIC}'
+/bin/bash -c 'CAPTURENIC=$(nmcli conn |grep "WAN"|awk "{print \$4}")  && /usr/local/dnsmonitor/dnsmonitor -interface=${CAPTURENIC}'
